@@ -59,11 +59,15 @@ public class OldQDoxParanamerTestCase {
     }
 
     private String paranamerDataOf(String className, String fileName) throws IOException, NoSuchFieldException, IllegalAccessException {
-        FileInputStream fis = new FileInputStream(root + "/target/test-classes/com/thoughtworks/paranamer/generator/" + fileName + ".class");
-        byte[] bytes = new byte[40000];
-        int read = fis.read(bytes);
-        byte[] bytes2 = new byte[read];
-        System.arraycopy(bytes, 0, bytes2, 0, read);
+        byte[] bytes2 = null;
+        int read = 0;
+        try (FileInputStream fis = new FileInputStream(root + "/target/test-classes/com/thoughtworks/paranamer/generator/" + fileName + ".class")) {
+            byte[] bytes = new byte[40000];
+            
+            read = fis.read(bytes);
+            bytes2 = new byte[read];
+            System.arraycopy(bytes, 0, bytes2, 0, read);
+        }
 
         MyClassLoader cl = new MyClassLoader();
 
